@@ -1,0 +1,6 @@
+*/.caradoc
+**/.caradoc
+.env
+*/.env
+**/.env
+.vscode

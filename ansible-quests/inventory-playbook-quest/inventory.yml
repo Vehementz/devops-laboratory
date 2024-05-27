@@ -1,0 +1,20 @@
+all:
+  children:
+    web_servers:
+      hosts:
+        192.69.69.69:
+          ansible_connection: ssh
+          ansible_user: root
+          # ansible_ssh_pass: "paslevrais"
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
+        # 192.168.1.11:
+        #   ansible_connection: ssh
+        #   ansible_user: toor
+        #   ansible_ssh_private_key_file: ~/.ssh/id_rsa
+    database_servers:
+      hosts:
+        192.69.69.69:
+          ansible_connection: ssh
+          ansible_user: root
+          # ansible_ssh_pass: "paslevrais"
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
