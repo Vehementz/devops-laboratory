@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: ton_nom  
+  description: Ansible role to install phpmyadmin
+  company: devacteur
+  license: Proprietary
+  min_ansible_version: '2.9'  
+
+  platforms:
+    - name: Debian
+      versions:
+        - bookworm 
+
+  galaxy_tags: 
+    - phpmyadmin
+
+
+dependencies: [] 

@@ -1,0 +1,7 @@
+---
+# Handler pour redémarrer nginx
+# - name: Redémarrer Nginx
+#   service:
+#     name: nginx
+#     state: restarted
+

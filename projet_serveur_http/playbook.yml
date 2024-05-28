@@ -1,0 +1,7 @@
+---
+- name: Installer et démarrer Nginx
+  hosts: webserver  # Assure-toi que cela correspond à un groupe dans ton inventaire
+  become: yes  # Devient sudo pour exécuter les tâches
+
+  roles:
+    - nginx_install # Nom du dossier de ton rôle

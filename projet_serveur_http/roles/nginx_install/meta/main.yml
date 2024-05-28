@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  author: ton_nom  # Remplace par ton nom ou pseudonyme
+  description: Rôle Ansible pour installer et démarrer Nginx
+  company: ta_compagnie  # Remplace par le nom de ta compagnie ou laisse vide
+  license: MIT  # Choisir une licence appropriée pour ton rôle
+  min_ansible_version: 2.9  # Mettre la version minimale d'Ansible requise pour ton rôle
+  platforms:
+    - name: Debian
+      versions:
+        - bookworm # Debian 12
+  galaxy_tags:  # Tags qui décrivent ton rôle et aident à le trouver sur Ansible Galaxy
+    - web
+    - nginx
+    - server
+
+dependencies: []  # Liste les dépendances à d'autres rôles, pas nécessaire ici mais pour info
+

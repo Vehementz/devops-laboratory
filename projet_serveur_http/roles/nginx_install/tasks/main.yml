@@ -1,0 +1,11 @@
+---
+# Tâches pour installer et démarrer Nginx
+- name: Installe Nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Assure que Nginx est démarré
+  service:
+    name: nginx
+    state: started
