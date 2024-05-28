@@ -1,0 +1,56 @@
+---
+# tasks file for phpmyadmin
+
+- name: Import assert.yml
+  ansible.builtin.import_tasks:
+    file: assert.yml
+  run_once: true
+  delegate_to: localhost
+
+- name: Install requirements
+  ansible.builtin.package:
+    name: "{{ phpmyadmin_requirements }}"
+    state: present
+  notify:
+    - Restart httpd
+
+- name: Modify selinux settings
+  ansible.posix.seboolean:
+    name: httpd_unified
+    state: true
+    persistent: true
+  when:
+    - ansible_selinux.status is defined
+    - ansible_selinux.status == "enabled"
+
+- name: Create directory
+  ansible.builtin.file:
+    path: "{{ phpmyadmin_httpd_directory }}/phpmyadmin"
+    state: directory
+    owner: "{{ phpmyadmin_httpd_user }}"
+    group: "{{ phpmyadmin_httpd_group }}"
+    mode: "755"
+
+- name: Download and unpack software
+  ansible.builtin.unarchive:
+    src: "{{ phpmyadmin_archive }}"
+    dest: "{{ phpmyadmin_httpd_directory }}/phpmyadmin/"
+    remote_src: true
+    extra_opts: ['--strip-components=1']
+    mode: "0755"
+
+- name: Create directories
+  ansible.builtin.file:
+    path: "{{ phpmyadmin_httpd_directory }}/phpmyadmin/tmp"
+    state: directory
+    owner: "{{ phpmyadmin_httpd_user }}"
+    group: "{{ phpmyadmin_httpd_group }}"
+    mode: "0750"
+
+- name: Configure software
+  ansible.builtin.template:
+    src: config.inc.php.j2
+    dest: "{{ phpmyadmin_httpd_directory }}/phpmyadmin/config.inc.php"
+    owner: "{{ phpmyadmin_httpd_user }}"
+    group: "{{ phpmyadmin_httpd_group }}"
+    mode: "640"
