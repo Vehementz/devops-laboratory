@@ -1,8 +1,0 @@
----
-
-# Installation des paquets mariadb serveur et son extension Python
-- name: "mariadb-server installation"
-  apt:
-    name: "mariadb-server,python3-mysqldb"
-    state: "present"
-

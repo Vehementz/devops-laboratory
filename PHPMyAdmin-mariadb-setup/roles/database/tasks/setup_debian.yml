@@ -1,0 +1,84 @@
+---
+- name: Install MariaDB official repository
+  when: mariadb_use_official_repo
+  block:
+    - name: Install MariaDB repo necessary packages
+      ansible.builtin.apt:
+        package:
+          - apt-transport-https
+          - gnupg2
+        state: present
+        update_cache: true
+
+    - name: Ensure keyrings dir exists
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Fetch MariaDB repository key
+      ansible.builtin.get_url:
+        url: https://mariadb.org/mariadb_release_signing_key.pgp
+        dest: /etc/apt/keyrings/mariadb-keyring.pgp
+        # //TEMP todo
+        # checksum: sha256:http://example.com/path/sha256sum.txt
+        owner: root
+        group: root
+        mode: "0644"
+      register: fetch_repository_key
+      # change is always triggered in check mode
+      when: not ansible_check_mode
+
+    - name: Determine repo distribution release
+      ansible.builtin.set_fact:
+        repo_distribution_release: >-
+          {{ 'sid' if 'trixie' in ansible_distribution_release else ansible_distribution_release }}
+
+    - name: Setup MariaDB repository sourcelist entry
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/mariadb.list
+        content: |
+          # Ansible managed
+          deb [signed-by=/etc/apt/keyrings/mariadb-keyring.pgp] {{ mariadb_use_official_repo_url }}/{{ mariadb_use_official_repo_version }}/{{ ansible_distribution | lower() }} {{ repo_distribution_release }} main
+        owner: root
+        group: root
+        mode: "0644"
+      when: not mariadb_use_official_repo_format_deb822
+
+    - name: Setup MariaDB repository sources entry
+      ansible.builtin.copy:
+        dest: /etc/apt/sources.list.d/mariadb.sources
+        content: |
+          # Ansible managed
+          X-Repolib-Name: MariaDB
+          Types: deb
+          URIs: {{ mariadb_use_official_repo_url }}/{{ mariadb_use_official_repo_version }}/{{ ansible_distribution | lower() }}
+          Suites: {{ repo_distribution_release }}
+          Components: main
+          Signed-By: /etc/apt/keyrings/mariadb-keyring.pgp
+        owner: root
+        group: root
+        mode: "0644"
+      when: mariadb_use_official_repo_format_deb822
+
+    - name: Prefer MariaDB repo over Debian repo
+      ansible.builtin.copy:
+        dest: /etc/apt/preferences.d/release
+        content: |
+          # Ansible managed
+          Package: *
+          Pin: origin {{ mariadb_use_official_repo_url | urlsplit('hostname') }}
+          Pin-Priority: 1000
+        owner: root
+        group: root
+        mode: "0644"
+
+- name: Install packages (apt)
+  ansible.builtin.apt:
+    package:
+      - "{{ mariadb_package }}"
+      - python3-pymysql
+    state: present
+    update_cache: true

@@ -1,0 +1,61 @@
+---
+
+# I have decided to use MariaDB's default socket authentication
+# This means that it is imperative to use `login_unix_socket: "{{ mariadb_socket }}"`
+# for the mysql_user and mysql_db modules (but `check_implicit_admin: yes` is
+# curiously not required).
+
+- name: Disallow remote root login
+  ansible.builtin.command: |
+    mysql -NBe "DELETE FROM mysql.user
+    WHERE User='{{ mysql_root_username }}' AND Host NOT IN ('localhost', '127.0.0.1', '::1')"
+  changed_when: false
+
+# Note, you are not doing anything with this task
+- name: Get list of hosts for the root user
+  ansible.builtin.command: |
+    mysql -NBe "SELECT Host FROM mysql.user
+    WHERE User = '{{ mysql_root_username }}'
+    ORDER BY (Host='localhost') ASC"
+  changed_when: false
+  check_mode: false
+
+# According to the MariaDB docs, one can set the password and still retain 
+# the password-less access via sudo.
+# https://mariadb.com/kb/en/authentication-from-mariadb-104/#description
+# But when I set password with the following task,
+# mysql_native_password takes effect (and works), but with the unintended side-effect
+# that socket auth no longer works (not directly from the commandline either).
+# https://dba.stackexchange.com/a/274548
+# - name: Set a password for the MariaDB root account
+#   community.mysql.mysql_user:
+#     login_unix_socket: "{{ mariadb_socket }}"
+#     check_implicit_admin: yes
+#     name: "{{ mysql_root_username }}"
+#     password: "{{ mariadb_root_pwd }}"
+#     priv: "*.*:ALL,GRANT"
+#     state: present
+#   no_log: true
+
+
+- name: Get list of hosts for the anonymous user
+  ansible.builtin.command: mysql -NBe 'SELECT Host FROM mysql.user WHERE User = ""'
+  register: mysql_anonymous_hosts
+  changed_when: false
+  check_mode: false
+
+- name: Remove anonymous MySQL users
+  community.mysql.mysql_user:
+    check_implicit_admin: yes
+    login_unix_socket: "{{ mariadb_socket }}"
+    name: ""
+    host: "{{ item }}"
+    state: absent
+  with_items: "{{ mysql_anonymous_hosts.stdout_lines|default([]) }}"
+
+- name: Remove MySQL test database
+  community.mysql.mysql_db:
+    check_implicit_admin: yes
+    login_unix_socket: "{{ mariadb_socket }}"
+    name: 'test'
+    state: absent

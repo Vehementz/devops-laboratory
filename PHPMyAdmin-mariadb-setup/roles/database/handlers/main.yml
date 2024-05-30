@@ -1,0 +1,34 @@
+---
+# Handler folder
+
+- name: Ensure MariaDB is started and enabled on boot
+  ansible.builtin.service:
+    name: "{{ mysql_daemon }}"
+    state: started
+    enabled: "{{ mysql_enabled_on_startup }}"
+  register: mysql_service_configuration
+
+- ansible.builtin.import_tasks: secure-installation.yml
+
+- ansible.builtin.import_tasks: log-git-state.yml
+  tags:
+    - log-git-state
+
+# # Active le service MariaDB
+# - name: "start mariadb service"
+#   service:
+#     name: "mariadb"
+#     state: "started"
+#     enabled: yes
+
+# # # Actuve l'écoute sur tous les ports IPv4
+# # - name: "change 50-server.cnf"
+# #   command:
+# #     /usr/bin/sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
+
+# # Restart mariadb
+# - name: "restart mariasdb"
+#   service:
+#     name: "mariadb"
+#     state: restarted
+
