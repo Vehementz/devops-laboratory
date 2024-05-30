@@ -3,17 +3,17 @@
 On lance une vérification pour s'assurer que ça peut potentiellement fonctionner :
 
 ```
-ansible-playbook -i inventory.yml playbook.yml --check
+ansible-playbook -i inventory.yml deploy_pma.yml--check
 ```
 
 ```
-ansible-playbook -i inventory.yml playbook.yml --limit "192.168.122.84"
+ansible-playbook -i inventory.yml deploy_pma.yml --limit "192.168.122.84"
 ```
 
 Si le test passe, alors tu peux jouer réellement le playbook :
 
 ```
-ansible-playbook -i inventory.yml playbook.yml
+ansible-playbook -i inventory.yml deploy_pma.yml
 ```
 
 To connect to the database. Or others credentials. Modify them
