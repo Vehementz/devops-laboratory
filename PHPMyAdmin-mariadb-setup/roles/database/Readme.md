@@ -3,6 +3,10 @@
 Repositories used 
 https://codeberg.org/ansible/mariadb/src/branch/main/tasks/install.yml
 
+```
+ansible-vault create /vars/secure.yml
+```
+
 
 [![pre-commit](https://github.com/fauust/ansible-role-mariadb/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/fauust/ansible-role-mariadb/actions/workflows/pre-commit.yml)
 [![Default](https://github.com/fauust/ansible-role-mariadb/actions/workflows/test_default.yml/badge.svg)](https://github.com/fauust/ansible-role-mariadb/actions/workflows/test_default.yml)

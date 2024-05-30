@@ -55,7 +55,7 @@
           X-Repolib-Name: MariaDB
           Types: deb
           URIs: {{ mariadb_use_official_repo_url }}/{{ mariadb_use_official_repo_version }}/{{ ansible_distribution | lower() }}
-          Suites: {{ repo_distribution_release }}
+          Suites: {{  }}
           Components: main
           Signed-By: /etc/apt/keyrings/mariadb-keyring.pgp
         owner: root
@@ -74,7 +74,7 @@
         owner: root
         group: root
         mode: "0644"
-
+ 
 - name: Install packages (apt)
   ansible.builtin.apt:
     package:
@@ -82,3 +82,25 @@
       - python3-pymysql
     state: present
     update_cache: true
+
+- name: Set MariaDB root password
+  mysql_user:
+    login_user: root
+    login_password: "{{ mariadb_root_password_current }}"
+    name: root
+    password: "{{ mariadb_root_password_new }}"
+    host_all: yes
+    state: present
+  when: mariadb_root_password_new is defined
+  become: true
+  become_user: root
+
+- name: Ensure root login only from localhost
+  mysql_user:
+    login_user: root
+    login_password: "{{ mariadb_root_password_new }}"
+    name: root
+    host: localhost
+    state: present
+  become: true
+  become_user: root
