@@ -6,15 +6,25 @@ On lance une vérification pour s'assurer que ça peut potentiellement fonctionn
 ansible-playbook -i inventory.yml playbook.yml --check
 ```
 
+```
+ansible-playbook -i inventory.yml playbook.yml --limit "192.168.122.84"
+```
+
 Si le test passe, alors tu peux jouer réellement le playbook :
 
 ```
 ansible-playbook -i inventory.yml playbook.yml
 ```
 
+To connect to the database. Or others credentials. Modify them
+```
+mariadb -h 127.0.0.1 -u  user1 rhrejgrjger db1
+```
+
 Et normalement, en te connectant sur la machine ciblée de ton inventaire, tu devrais avoir un serveur http sous Nginx installé et démarré.
 
 Dans le cas où tu te retrouves avec des erreurs, il est nécessaire de bien lire le retour d'erreur fourni par Ansible dans lequel se trouve très probablement l'explication concrète du problème.
+
 
 
 

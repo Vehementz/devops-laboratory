@@ -41,7 +41,6 @@
     state: link
   when: mariadb_cmd.stat.exists is false
 
-
 - name: Set root password
   mysql_user:
     login_user: root
@@ -51,7 +50,7 @@
     host_all: yes
     state: present
   when: mariadb_root_password_new is defined
-  become: yes
+  become: true
   become_user: root
 
 - name: Ensure root login only from localhost

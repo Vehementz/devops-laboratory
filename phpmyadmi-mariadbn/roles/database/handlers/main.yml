@@ -10,9 +10,9 @@
 
 - ansible.builtin.import_tasks: secure-installation.yml
 
-- ansible.builtin.import_tasks: log-git-state.yml
-  tags:
-    - log-git-state
+# - ansible.builtin.import_tasks: log-git-state.yml
+#   tags:
+#     - log-git-state
 
 # # Active le service MariaDB
 # - name: "start mariadb service"
@@ -26,9 +26,9 @@
 # #   command:
 # #     /usr/bin/sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
 
-# # Restart mariadb
-# - name: "restart mariasdb"
-#   service:
-#     name: "mariadb"
-#     state: restarted
+# Restart mariadb
+- name: "restart mariasdb"
+  service:
+    name: "mariadb"
+    state: restarted
 

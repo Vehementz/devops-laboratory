@@ -1,8 +1,6 @@
 ---
 # defaults file for phpmyadmin
 # The version of PHPMyAdmin to install
-
----
 # vars file for phpmyadmin
 
 phpmyadmin_archive: "https://files.phpmyadmin.net/phpMyAdmin/{{ phpmyadmin_version }}/phpMyAdmin-{{ phpmyadmin_version }}-all-languages.tar.gz"
