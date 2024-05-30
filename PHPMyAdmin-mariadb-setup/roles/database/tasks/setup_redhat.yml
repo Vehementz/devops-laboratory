@@ -42,4 +42,24 @@
   when: mariadb_cmd.stat.exists is false
 
 
-  
+- name: Set root password
+  mysql_user:
+    login_user: root
+    login_password: "{{ mariadb_root_password_current }}"
+    name: root
+    password: "{{ mariadb_root_password_new }}"
+    host_all: yes
+    state: present
+  when: mariadb_root_password_new is defined
+  become: yes
+  become_user: root
+
+- name: Ensure root login only from localhost
+  mysql_user:
+    login_user: root
+    login_password: "{{ mariadb_root_password_new }}"
+    name: root
+    host: localhost
+    state: present
+  become: true
+  become_user: root
