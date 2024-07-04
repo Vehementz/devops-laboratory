@@ -37,11 +37,12 @@ services:
 networks:
   frontend:
   backend:
-secrets:
-   db_password:
-     file: db_password.txt
-   db_root_password:
-     file: db_root_password.txt
+###### Secrets not used for the moment 
+# secrets:
+#    db_password:
+#      file: db_password.txt
+#    db_root_password:
+#      file: db_root_password.txt
 volumes:
   db_data:
   wp_data:
