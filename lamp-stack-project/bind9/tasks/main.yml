@@ -10,8 +10,49 @@
       when: ansible_distribution != 'Debian' and ansible_distribution != 'Ubuntu'
 
     - name: Installation for Debian like systems
-      include_tasks: debian.yml
+      # include_tasks: debian.yml
       when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+    - name: check if data directory for local bind9 data exists
+      become: no
+      local_action: stat path="{{ bind9_data }}"
+      register: bind9_data_exists
+
+    - name: Stop here because no local data directory exists
+      fail: msg="Please create a local data directory first ({{ bind9_data }})"
+      when: bind9_data_exists.stat.exists == False or bind9_data_exists.stat.isdir == False
+
+
+    - name: check if keys directory for local bind9 data exists
+      become: no
+      local_action: stat path="{{ bind9_data }}/keys"
+      register: bind9_data_keys_exists
+
+    - name: Stop here because no local keys directory exists
+      fail: msg="Please create a local keys directory first ({{ bind9_data }}/keys)"
+      when: bind9_data_keys_exists.stat.exists == False or bind9_data_keys_exists.stat.isdir == False
+
+
+    - name: check if zones directory for local bind9 data exists
+      become: no
+      local_action: stat path="{{ bind9_data }}/zones"
+      register: bind9_data_zones_exists
+
+    - name: Stop here because no local zones directory exists
+      fail: msg="Please create a local zones directory first ({{ bind9_data }}/zones)"
+      when: bind9_data_zones_exists.stat.exists == False or bind9_data_zones_exists.stat.isdir == False
+
+
+    - name: check if zone-data directory for local bind9 data exists
+      become: no
+      local_action: stat path="{{ bind9_data }}/zone-data"
+      register: bind9_data_zone_data_exists
+
+    - name: Stop here because no local zone-data directory exists
+      fail: msg="Please create a local zone-data directory first ({{ bind9_data }}/zone-data)"
+      when: bind9_data_zone_data_exists.stat.exists == False or bind9_data_zone_data_exists.stat.isdir == False
+
+      
 
     - name: Install dependencies packages
       apt: 

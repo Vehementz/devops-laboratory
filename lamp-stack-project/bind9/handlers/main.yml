@@ -20,3 +20,8 @@
       name: named
       state: reloaded
       
+  - name: reload apparmor bind9 profile
+   shell: /sbin/apparmor_parser -r /etc/apparmor.d/usr.sbin.named
+
+  - name: reload bind9
+    service: name=bind9 state=reloaded
