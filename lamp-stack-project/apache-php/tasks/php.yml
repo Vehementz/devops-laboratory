@@ -1,6 +1,5 @@
 ---
 # tasks file for php
----
 - name: Install PHP 8.1 on Debian from sury.org repository
   hosts: php-apache
   become: true
