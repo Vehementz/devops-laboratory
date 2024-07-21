@@ -3,7 +3,12 @@
 - name: Install tasks for bind9
   hosts: bind9
   become: true
-  tasks: 
+  tasks:
+
+    - name: Check OS (bind9 - debian)
+      fail: msg="Not a Debian based system!"
+      when: ansible_distribution != 'Debian' and ansible_distribution != 'Ubuntu'
+
     - name: Install dependencies packages
       apt: 
         name: "{{ item }}"
@@ -14,3 +19,7 @@
         - bind9utils 
         - bind9-doc 
         - dnsutils
+
+    - name: Show bind9 version
+      ansible.builtin.shell: sudo named -v
+      
