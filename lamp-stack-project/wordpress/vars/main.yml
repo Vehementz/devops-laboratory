@@ -1,2 +1,8 @@
 ---
 # vars file for wordpress
+wp_cli_user: wp-cli
+wp_cli_group: wp-cli
+wp_cli_home: /home/{{ wp_cli_user }}
+wp_cli_global_config_path: /home/{{ wp_cli_user }}/.wp-cli
+wp_cli_completion_path: "{{ wp_cli_home }}/wp-completion.bash"
+wp_cli_config_file: "{{ wp_cli_home }}/wp-cli.yml"

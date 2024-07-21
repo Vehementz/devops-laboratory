@@ -1,0 +1,60 @@
+---
+- hosts: all
+  become: yes  # Necessary for installing packages and modifying system files
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: Ensure WP-CLI user exists
+      user:
+        name: "{{ wp_cli_user }}"
+        group: "{{ wp_cli_group }}"
+        home: "{{ wp_cli_home }}"
+        system: yes
+        create_home: yes
+
+    - name: Install WP-CLI
+      get_url:
+        url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+        dest: "/usr/local/bin/wp"
+        mode: '0755'
+
+    - name: Set WP-CLI global configuration
+      copy:
+        dest: "{{ wp_cli_config_file }}"
+        content: |
+          color: true
+
+    - name: Update WP-CLI to latest version
+      command: "wp cli update"
+      become_user: "{{ wp_cli_user }}"
+
+    - name: Set up nightly builds (if required)
+      command: "wp cli update --nightly"
+      become_user: "{{ wp_cli_user }}"
+      when: wp_cli_nightly
+
+    - name: Download WP-CLI completion script
+      get_url:
+        url: https://github.com/wp-cli/wp-cli/raw/master/utils/wp-completion.bash
+        dest: "{{ wp_cli_completion_path }}"
+
+    - name: Configure bash completion for Bash users
+      blockinfile:
+        path: "{{ wp_cli_home }}/.bash_profile"
+        block: |
+          source "{{ wp_cli_completion_path }}"
+
+    - name: Configure bash completion for Zsh users
+      blockinfile:
+        path: "{{ wp_cli_home }}/.zshrc"
+        block: |
+          autoload bashcompinit
+          bashcompinit
+          source "{{ wp_cli_completion_path }}"
+
+    - name: Reload shell if already running (optional task)
+      command: "source {{ wp_cli_home }}/.bash_profile"
+      args:
+        executable: /bin/bash
+      become_user: "{{ wp_cli_user }}"
