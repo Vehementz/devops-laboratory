@@ -2,17 +2,18 @@
 # tasks file for php
 ---
 - name: Install PHP 8.1 on Debian from sury.org repository
-  hosts: all
-  become: yes
+  hosts: php-apache
+  become: true
   tasks:
     - name: Install necessary packages for managing the repository over HTTPS
       apt:
-        name:
+        name: "{{ package }}"
+        state: present
+      loop: 
           - apt-transport-https
           - lsb-release
           - curl
-        state: present
-        update_cache: yes
+      update_cache: true
 
     - name: Download and install the GPG key for the sury.org repository
       get_url:
@@ -26,7 +27,7 @@
 
     - name: Update apt cache after adding new repository
       apt:
-        update_cache: yes
+        update_cache: true
 
     - name: Remove existing PHP packages and configurations
       apt:
@@ -57,3 +58,6 @@
       systemd:
         name: apache2
         state: restarted
+
+    - name: Show PHP version
+      ansible.builtin.shell: php -v
