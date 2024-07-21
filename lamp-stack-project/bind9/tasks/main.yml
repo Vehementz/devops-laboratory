@@ -3,6 +3,8 @@
 # Maybe add some code from the repo here to improve it
 # https://github.com/andreasscherbaum/ansible-bind9/blob/master/tasks/deploy.yml
 
+# Maybe some config file to add, exemple in the link below
+# https://www.linuxbuzz.com/setup-bind-dns-server-on-debian/
 
 - name: Install tasks for bind9
   hosts: bind9
