@@ -1,2 +1,16 @@
 ---
 # tasks file for bind9
+- name: Install tasks for bind9
+  hosts: bind9
+  become: true
+  tasks: 
+    - name: Install dependencies packages
+      apt: 
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      loop:
+        - bind9 
+        - bind9utils 
+        - bind9-doc 
+        - dnsutils

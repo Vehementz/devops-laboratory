@@ -6,7 +6,7 @@
   tasks:
     - name: Install necessary packages for managing the repository over HTTPS
       apt:
-        name: "{{ package }}"
+        name: "{{ item }}"
         state: present
       loop: 
           - apt-transport-https

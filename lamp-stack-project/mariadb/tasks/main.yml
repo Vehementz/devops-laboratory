@@ -1,6 +1,5 @@
 ---
 # tasks file for mariadb
----
 - name: Install MariaDB official repository
   when: mariadb_use_official_repo
   block:
