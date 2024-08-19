@@ -13,9 +13,9 @@ output "container_root_password" {
 
 # location of containers templates
 resource "proxmox_virtual_environment_file" "debian_container_template" {
-  content_type = "vztmpl"
+  content_type = "vztmpl" #  The content_type is set to "vztmpl" indicating it's a virtual machine or container template. This file is fetched from a specific datastore and node as defined by the variables ct_datastore_template_location and node_name.
   datastore_id = var.ct_datastore_template_location
-  node_name    = "pve1"
+  node_name    = var.pve_node_name
 
   source_file {
     path = var.ct_source_file_path
@@ -24,14 +24,14 @@ resource "proxmox_virtual_environment_file" "debian_container_template" {
 
 resource "proxmox_virtual_environment_container" "debian_container" {
   description   = "Managed by Terraform"
-  node_name     = "pve1"
-  start_on_boot = true
+  node_name     = var.pve_node_name
+  start_on_boot = true # Boots automatically with the system (start_on_boot = true).
   tags          = ["linux", "infra"]
-  unprivileged  = true
-  vm_id         = 241001
+  unprivileged  = true # Runs unprivileged, enhancing security.
+  vm_id         = 241001  
 
   cpu {
-    architecture = "amd64"
+    architecture = var.cpu_architecture # Includes a CPU setup for an AMD64 architecture with one core.
     cores        = 1
   }
 
@@ -46,7 +46,7 @@ resource "proxmox_virtual_environment_container" "debian_container" {
   }
 
   operating_system {
-    template_file_id = proxmox_virtual_environment_file.debian_container_template.id
+    template_file_id = proxmox_virtual_environment_file.debian_container_template.id # Uses the Debian template file from the earlier defined 
     type             = var.os_type
   }
 
@@ -60,18 +60,18 @@ resource "proxmox_virtual_environment_container" "debian_container" {
 
     ip_config {
       ipv4 {
-        address = "192.168.1.3/24"
+        address = var.ipv4_address
         gateway = var.gateway
       }
     }
-    user_account {
-      keys     = ["put-your-ssh-pubkey-here"]
-      password = random_password.container_root_password.result
-    }
+    # user_account { # Sets up a user account with SSH public key access and the generated password from the random_password resource.
+    #   keys     = ["put-your-ssh-pubkey-here"]
+    #   password = random_password.container_root_password.result
+    # }
   }
-  network_interface {
-    name       = var.ct_bridge
-    rate_limit = var.ct_nic_rate_limit
+  network_interface { # Configures a network interface with specified bridging and rate limits.
+    name       = var.ct_bridge # that likely specifies the network bridge this container will connect to. 
+    rate_limit = var.ct_nic_rate_limit 
   }
 
   features {
@@ -79,4 +79,3 @@ resource "proxmox_virtual_environment_container" "debian_container" {
     fuse    = false
   }
 }
-
