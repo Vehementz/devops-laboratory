@@ -11,13 +11,13 @@ ipv4_address                   = "192.168.1.3/24"              # Static IP addre
 ct_bridge                      =  "vmbr0"  # "vmbr2"                       # Network bridge for container connectivity
 
 # Storage and File Locations
-ct_datastore_storage_location  = "local-lvm"         # Local config - Storage location for container data
+ct_datastore_storage_location  = "local-lvm:8"         # Local config - Storage location for container data
 # ct_datastore_storage_location  = "local-hdd-templates"         # Storage location for container data
-ct_datastore_template_location = "local:ubuntu-22.04-standard_22.04-1_amd64.tar.zst" # Template file location and name
+ct_datastore_template_location = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst" # Template file location and name
 ct_source_file_path            = "http://download.proxmox.com/images/system/ubuntu-22.04-standard_22.04-1_amd64.tar.zst" # Source file URL for the container image
 
 # Container Specifications
-ct_disk_size                   = "8"                           # Disk size for the container in GB
+ct_disk_size                   = "20"                           # Disk size for the container in GB
 ct_memory                      = 1024                           # RAM allocated to the container in MB
 ct_nic_rate_limit              = 10                            # NIC rate limit in MB/s
 os_type                        = "ubuntu" # "debian"                      # Operating system type for the container
