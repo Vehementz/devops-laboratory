@@ -4,27 +4,47 @@ terraform {
       source  = "bpg/proxmox"
       version = ">= 0.50.0"
     }
+
+    vault = {
+      source  = "hashicorp/vault"
+      version = "~> 3.0"
+    }
+
   }
 }
 
+provider "vault" {
+  # Set your Vault address here
+  address = "https://your-vault-server:8200"
+  # Use token or other authentication method as per your Vault setup
+  token   = "your_vault_token_here"
+}
+
+data "vault_generic_secret" "proxmox_credentials" {
+  path = "secret/proxmox"
+}
+
+
+## Second option
 provider "proxmox" {
-  # url is the hostname (FQDN if you have one) for the proxmox host you'd like to connect to to issue the commands. my proxmox host is 'prox-1u'. Add /api2/json at the end for the API
-  pm_api_url = "https://prox-1u:8006/api2/json"
-  # api token id is in the form of: <username>@pam!<tokenId>
-  pm_api_token_id = "blog_example@pam!new_token_id"
-  # this is the full secret wrapped in quotes. don't worry, I've already deleted this from my proxmox cluster by the time you read this post
-  pm_api_token_secret = "9ec8e608-d834-4ce5-91d2-15dd59f9a8c1"
-  # leave tls_insecure set to true unless you have your proxmox SSL certificate situation fully sorted out (if you do, you will know)
+  pm_api_url      = "https://proxmox.example.com:8006/api2/json"
+  pm_user         = "root@pam"
+  pm_password     = "your_password"
   pm_tls_insecure = true
 }
 
-### Second option
+
 # provider "proxmox" {
-#   pm_api_url      = "https://proxmox.example.com:8006/api2/json"
-#   pm_user         = "root@pam"
-#   pm_password     = "your_password"
+#   # url is the hostname (FQDN if you have one) for the proxmox host you'd like to connect to to issue the commands. my proxmox host is 'prox-1u'. Add /api2/json at the end for the API
+#   pm_api_url = "https://prox-1u:8006/api2/json"
+#   # api token id is in the form of: <username>@pam!<tokenId>
+#   pm_api_token_id = "blog_example@pam!new_token_id"
+#   # this is the full secret wrapped in quotes. don't worry, I've already deleted this from my proxmox cluster by the time you read this post
+#   pm_api_token_secret = "9ec8e608-d834-4ce5-91d2-15dd59f9a8c1"
+#   # leave tls_insecure set to true unless you have your proxmox SSL certificate situation fully sorted out (if you do, you will know)
 #   pm_tls_insecure = true
 # }
+
 
 resource "proxmox_lxc" "debian_container" {
   node      = "pve-node"
