@@ -1,9 +1,36 @@
 ### container.tf
 # see https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password.html. It will download "hashicorp/random" provider
+
+terraform {
+  required_providers {
+    proxmox = {
+      source = "bpg/proxmox"
+      version = "0.62.0"
+    }
+    random = {
+      source = "hashicorp/random"
+      version = "3.6.2"
+    }
+  }
+}
+
+provider "proxmox" {
+  endpoint  = var.pve_host_address
+  username = var.pve_api_user
+  password = var.pve_password
+  # api_token = var.pve_api_token
+  insecure  = true
+  ssh {
+    agent    = true
+    # username = var.pve_api_user
+  }
+  tmp_dir = var.tmp_dir
+}
+
 resource "random_password" "container_root_password" {
-  length           = 24
-  override_special = "_%@"
+  length           = 16
   special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
 output "container_root_password" {
@@ -22,6 +49,14 @@ resource "proxmox_virtual_environment_file" "debian_container_template" {
   }
 }
 
+# resource "proxmox_virtual_environment_pool" "operations_pool" {
+#   comment = "Managed by Terraform"
+#   pool_id = "ASD-202402"
+# }
+
+
+
+
 resource "proxmox_virtual_environment_container" "debian_container" {
   description   = "Managed by Terraform"
   node_name     = var.pve_node_name
@@ -32,7 +67,7 @@ resource "proxmox_virtual_environment_container" "debian_container" {
 
   cpu {
     architecture = var.cpu_architecture # Includes a CPU setup for an AMD64 architecture with one core.
-    cores        = 1
+    cores        = var.cpu_cores
   }
 
   disk {
@@ -42,8 +77,9 @@ resource "proxmox_virtual_environment_container" "debian_container" {
 
   memory {
     dedicated = var.ct_memory
-    swap      = 0
+    swap      = var.swap_config
   }
+
 
   operating_system {
     template_file_id = proxmox_virtual_environment_file.debian_container_template.id # Uses the Debian template file from the earlier defined 
@@ -53,10 +89,10 @@ resource "proxmox_virtual_environment_container" "debian_container" {
   initialization {
     hostname = "ct-example"
 
-    dns {
-      domain = var.dns_domain
-      server = var.dns_server
-    }
+    # dns {
+    #   domain = var.dns_domain
+    #   server = var.dns_server
+    # }
 
     ip_config {
       ipv4 {

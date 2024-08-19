@@ -34,9 +34,9 @@ variable "gateway" {
 variable "os_type" {
   type = string
 }
-variable "pve_api_token" {
-  type = string
-}
+# variable "pve_api_token" {
+#   type = string
+# }
 variable "pve_api_user" {
   type = string
 }
@@ -52,9 +52,19 @@ variable "pve_node_name" {
 variable "cpu_architecture" {
   type = string
 }
-
 variable "ipv4_address" {
   type = string
+}
+variable "pve_password" {
+  type = string
+}
+
+variable "cpu_cores" {
+  type = number
+}
+
+variable "swap_config" {
+  type = number
 }
 
 # variable "ssh_key" {

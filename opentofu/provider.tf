@@ -1,30 +1,52 @@
 ### provider.tf
-terraform {
-  required_providers {
-    proxmox = {
-      source  = "bpg/proxmox"
-      version = "0.41.0"
-    }
-  }
-}
+# terraform {
+#   required_providers {
+#     proxmox = {
+#       source = "bpg/proxmox"
+#       version = "0.62.0"
+#     }
+#   }
+# }
 
-provider "proxmox" {
-  endpoint  = var.pve_host_address
-  api_token = var.pve_api_token
-  insecure  = true
-  ssh {
-    agent    = true
-    username = var.pve_api_user
-  }
-  tmp_dir = var.tmp_dir
-}
+# provider "proxmox" {
+#   endpoint  = var.pve_host_address
+#   username = var.pve_api_user
+#   password = var.pve_password
+#   # api_token = var.pve_api_token
+#   insecure  = true
+#   ssh {
+#     agent    = true
+#     # username = var.pve_api_user
+#   }
+#   tmp_dir = var.tmp_dir
+# }
 
-## Second option
-provider "proxmox" {
-  endpoint = "https://10.0.0.2:8006/"
-  username = "username@realm"
-  password = "the-password-set-during-installation-of-proxmox-ve"
-  insecure = true
+# provider "proxmox" {
+#   endpoint  = var.pve_host_address
+#   api_token = var.pve_api_token
+#   insecure  = true
+#   ssh {
+#     agent    = true
+#     username = var.pve_api_user
+#   }
+#   tmp_dir = var.tmp_dir
+# }
+
+# ## Second option
+# provider "proxmox" {
+#   endpoint = ""
+#   username = ""
+#   password = ""
+#   insecure = true
+
+
+#   ssh {
+#     agent       = false
+#     username = "terraform"
+#     # private_key = file("~/.ssh/id_rsa")
+#   }
+
+# }
 
 #   pm_api_url      = "https://wcs-cyber-node01.v6.rocks:8006/api2/json"
 #   pm_user         = ""
@@ -32,14 +54,8 @@ provider "proxmox" {
 #   pm_tls_insecure = true
 #   pm_user         = ""
 
-# 
-  ssh {
-    agent       = false
-    username = "terraform"
-    private_key = file("~/.ssh/id_rsa")
-  }
 
-}
+
 
 # provider "proxmox" {
 #   # url is the hostname (FQDN if you have one) for the proxmox host you'd like to connect to to issue the commands. my proxmox host is 'prox-1u'. Add /api2/json at the end for the API
@@ -51,18 +67,6 @@ provider "proxmox" {
 #   # leave tls_insecure set to true unless you have your proxmox SSL certificate situation fully sorted out (if you do, you will know)
 #   pm_tls_insecure = true
 # }
-
-
-provider "proxmox" {
-  endpoint  = var.pve_host_address
-  api_token = var.pve_api_token
-  insecure  = true
-  ssh {
-    agent    = true
-    username = var.pve_api_user
-  }
-  tmp_dir = var.tmp_dir
-}
 
 
 # resource "proxmox_lxc" "debian_lxc_container" {
@@ -92,10 +96,6 @@ provider "proxmox" {
 # #     mount   = "nfs;cifs"
 # #   }
 
-# #   rootfs { ### Root file system
-# #     storage = "local-nvme-datas"
-# #     size    = "8G"
-# #   }
 
 #   mountpoint {
 #     slot    = "0"
