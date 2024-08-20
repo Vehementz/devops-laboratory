@@ -78,10 +78,10 @@ resource "proxmox_virtual_environment_container" "debian_container" {
     cores        = var.cpu_cores
   }
 
-  # disk {
-  #   datastore_id = var.ct_datastore_storage_location
-  #   size         = var.ct_disk_size
-  # }
+  disk {
+    datastore_id = var.ct_datastore_storage_location
+    size         = var.ct_disk_size
+  }
 
 
   # boot_order    = ["scsi0"]
@@ -133,20 +133,13 @@ resource "proxmox_virtual_environment_container" "debian_container" {
     dns {
       servers = ["1.1.1.1", "8.8.8.8"]
     }
-    # dns {
-    #   domain = var.dns_domain
-    #   server = var.dns_server
-    # }
+
     ip_config {
       ipv4 {
         address = var.ipv4_address
         gateway = var.gateway
       }
     }
-    # user_account { # Sets up a user account with SSH public key access and the generated password from the random_password resource.
-    #   keys     = [file("/home/xday/.ssh/id_ed25519_wild.pub")]
-    #   password = random_password.container_root_password.result
-    # }
   }
   network_interface { # Configures a network interface with specified bridging and rate limits.
     name       = var.ct_bridge # that likely specifies the network bridge this container will connect to. 
@@ -158,3 +151,4 @@ resource "proxmox_virtual_environment_container" "debian_container" {
     fuse    = false
   }
 }
+

@@ -67,6 +67,10 @@ variable "swap_config" {
   type = number
 }
 
+# variable "ct_user_name" {
+#   type = string
+# }
+
 # variable "disk" {
 #   description = "Disk (size in Gb)"
 #   type = object({
