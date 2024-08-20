@@ -1,6 +1,8 @@
 ### container.tf
 # see https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password.html. It will download "hashicorp/random" provider
 
+## Ressource used : https://j.hommet.net/terraform-ct-pour-proxmox/
+
 terraform {
   required_providers {
     proxmox = {
@@ -16,13 +18,13 @@ terraform {
 
 provider "proxmox" {
   endpoint  = var.pve_host_address
-  username = var.pve_api_user
-  password = var.pve_password
-  # api_token = var.pve_api_token
+  api_token = var.pve_api_token
   insecure  = true
+  # username = var.pve_api_user
+  # password = var.pve_password
   ssh {
     agent    = true
-    # username = var.pve_api_user
+    username = var.pve_api_user
   }
   tmp_dir = var.tmp_dir
 }
@@ -40,7 +42,7 @@ output "container_root_password" {
 
 # location of containers templates
 resource "proxmox_virtual_environment_file" "debian_container_template" {
-  content_type = "vztmpl" #  The content_type is set to "vztmpl" indicating it's a virtual machine or container template. This file is fetched from a specific datastore and node as defined by the variables ct_datastore_template_location and node_name.
+  content_type = "dump" #  The content_type is set to "vztmpl" indicating it's a virtual machine or container template. This file is fetched from a specific datastore and node as defined by the variables ct_datastore_template_location and node_name.
   datastore_id = var.ct_datastore_template_location
   node_name    = var.pve_node_name
 
@@ -88,22 +90,20 @@ resource "proxmox_virtual_environment_container" "debian_container" {
 
   initialization {
     hostname = "ct-example"
-
     # dns {
     #   domain = var.dns_domain
     #   server = var.dns_server
     # }
-
     ip_config {
       ipv4 {
         address = var.ipv4_address
         gateway = var.gateway
       }
     }
-    # user_account { # Sets up a user account with SSH public key access and the generated password from the random_password resource.
-    #   keys     = ["put-your-ssh-pubkey-here"]
-    #   password = random_password.container_root_password.result
-    # }
+    user_account { # Sets up a user account with SSH public key access and the generated password from the random_password resource.
+      keys     = [""]
+      password = random_password.container_root_password.result
+    }
   }
   network_interface { # Configures a network interface with specified bridging and rate limits.
     name       = var.ct_bridge # that likely specifies the network bridge this container will connect to. 

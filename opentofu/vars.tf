@@ -34,9 +34,9 @@ variable "gateway" {
 variable "os_type" {
   type = string
 }
-# variable "pve_api_token" {
-#   type = string
-# }
+variable "pve_api_token" {
+  type = string
+}
 variable "pve_api_user" {
   type = string
 }
