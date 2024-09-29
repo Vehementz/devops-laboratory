@@ -3,7 +3,7 @@
 # Crt = corrected
 
 # Network Configuration
-# dns_domain                     = "domain.net"                  # Domain for DNS configuration
+# dns_domain                     = "domain.net"                  # Dom192.168.122.14ain for DNS configuration
 # dns_server                     = "192.168.1.1"                 # DNS server IP
 # gateway                        = "192.168.1.1"                 # Default network gateway
 # ipv4_address                   = "192.168.1.122/24"              # Static IP address for the container
@@ -35,18 +35,18 @@ cpu_cores                      = 1
 swap_config                    = 400
 
 # Proxmox VE Configuration
-pve_api_token                  = "terrabot@pve!tf=2c48a34c-a9" # API token for Proxmox server authentication
+pve_api_token                  = "terrabot@pve!tf=2c48a34c-0871-4c6e-bf36-df15b8e9eea9" # API token for Proxmox server authentication
 pve_api_user                   = "terrabot"                    # API user for Proxmox server
 pve_host_address               = "https://192.168.122.14:8006/"    # Proxmox VE API access address
 pve_node_name                  = "pve"                        # Node name in the Proxmox cluster
-pve_password                   = ""
+pve_password                   = "LcPyidqRwyThxAEa"
 
 # ct_user_name                   = "myuser"
 
 # System and Miscellaneous Settings
 cpu_architecture               = "amd64"                       # CPU architecture for the container
 tmp_dir                        = "/var/tmp"                    # Temporary directory for system files
-
+# tmp_dir                        = "/tmp"                      # Maybe it's a better configuration idea
 
 #### Errors 
 # │ Error: error listing files from datastore local-lvm:8: received an HTTP 403 response - Reason: Permission check failed (, Datastore.Audit|Datastore.AllocateSpace)
