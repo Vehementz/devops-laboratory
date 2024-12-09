@@ -18,7 +18,7 @@ ansible-playbook -i inventory.yml deploy_pma.yml
 
 To connect to the database. Or others credentials. Modify them
 ```
-mariadb -h 127.0.0.1 -u  user1 rhrejgrjger db1
+mariadb -h 127.0.0.1 -u  user1 rhrejgrjger db1  
 ```
 
 Et normalement, en te connectant sur la machine ciblée de ton inventaire, tu devrais avoir un serveur http sous Nginx installé et démarré.
