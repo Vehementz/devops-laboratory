@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1
+        style="
+          margin: 2rem auto;
+          width: 100%;
+          text-align: center;
+          color: white;
+          text-decoration: underline;
+        "
+      >
+        Task Manager
+      </h1>
+    </header>
+
+    <main class="wrapper-container">
+      <section aria-labelledby="add-task-section">
+        <h2 id="add-task-section">Add a new task</h2>
+        <form method="POST" action="/add" aria-describedby="add-task-desc">
+          <p id="add-task-desc">
+            Enter a title for the new task and submit to add it to the list.
+          </p>
+          <label for="title">Task Title:</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            required
+            aria-required="true"
+          />
+          <button class="add" type="submit" title="Add task">Add Task</button>
+        </form>
+      </section>
+
+      <nav aria-label="Sorting options">
+        <h2>Sort Tasks</h2>
+        <ul
+          class="list-style"
+          style="
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            text-decoration: none;
+            list-style: none;
+          "
+          class=""
+        >
+          <li>
+            <a
+              href="/?sort_by=created&order=asc"
+              title="Sort tasks by oldest first"
+              aria-label="Sort by oldest first"
+              >Oldest First</a
+            >
+          </li>
+          <li>
+            <a
+              href="/?sort_by=created&order=desc"
+              title="Sort tasks by newest first"
+              aria-label="Sort by newest first"
+              >Newest First</a
+            >
+          </li>
+          <li>
+            <a
+              href="/?sort_by=completed&order=asc"
+              title="Show incomplete tasks at the top"
+              aria-label="Sort by incomplete tasks first"
+              >Incomplete First</a
+            >
+          </li>
+          <li>
+            <a
+              href="/?sort_by=completed&order=desc"
+              title="Show completed tasks at the top"
+              aria-label="Sort by completed tasks first"
+              >Complete First</a
+            >
+          </li>
+        </ul>
+      </nav>
+
+      <section aria-labelledby="task-list-section">
+        <h2 id="task-list-section">Your Tasks</h2>
+        <ul>
+          {% for task in tasks %}
+          <li>
+            <div class="row">
+              <span>
+                {{ task.title }} - {% if task.completed %}
+                <strong>Completed</strong>
+                {% else %}
+                <strong>Incomplete</strong>
+                {% endif %}
+              </span>
+              {% if not task.completed %}
+              <div class="col">
+                <form
+                  method="POST"
+                  action="/complete/{{ task.id }}"
+                  style="display: inline"
+                >
+                  <button
+                    class="complete"
+                    type="submit"
+                    title="Mark task as complete"
+                    aria-label="Mark '{{ task.title }}' as complete"
+                  >
+                    Complete
+                  </button>
+                </form>
+                {% endif %}
+                <form
+                  method="POST"
+                  action="/delete/{{ task.id }}"
+                  style="display: inline"
+                >
+                  <button
+                    class="delete"
+                    type="submit"
+                    title="Delete task"
+                    aria-label="Delete '{{ task.title }}'"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>Task Manager Application</p>
+    </footer>
+  </body>
+</html>
