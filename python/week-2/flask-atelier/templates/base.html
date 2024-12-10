@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atelier Flask Web App Starter</title>
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+    <div class="site-content">
+        <header>
+            <h1 style="margin: 2rem auto; width: 100%; text-align: center; color: white; text-decoration: underline;">
+                Atelier
+            </h1>
+            <nav>
+                <a href="{{ url_for('hello') }}">Accueil</a> |
+                <a href="{{ url_for('about') }}">À propos</a> |
+                <a href="{{ url_for('contact') }}">Contact</a>
+            </nav>
+        </header>
+
+        <main>{% block content %}{% endblock %}</main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>Contact Us: info@example.com</p>
+            <p>© 2024 Company Name. All rights reserved.</p>
+            <ul class="social-links">
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Twitter</a></li>
+                <li><a href="#">Instagram</a></li>
+            </ul>
+        </div>
+    </footer>
+
+</body>
+</html>
