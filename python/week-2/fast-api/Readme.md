@@ -37,13 +37,12 @@ curl -X PUT http://127.0.0.1:8000/tasks/2 \
 ```
 
 
-<!-- When you install with pip install "fastapi[standard]" it comes with some default optional standard dependencies.
-If you don't want to have those optional dependencies, you can instead install pip install fastapi. -->
-
 ```
 fastapi dev main.py
 ```
 
 ```
-uvicorn app.main:app --reload
+uvicorn main:app --reload
 ```
+
+<!-- uvicorn app.main:app --reload -->
