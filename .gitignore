@@ -2,5 +2,8 @@
 **/.caradoc
 .env
 */.env
-**/.env
+**/.env/**
 .vscode
+**/__pycache__/**
+**/.venv/**
+
