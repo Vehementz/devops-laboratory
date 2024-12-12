@@ -10,9 +10,3 @@ def get_items():
 def get_item(item_id: int):
     return {"item_id": item_id, "name": f"Item {item_id}"}
 
-    
-# @router.post("/tasks/")  
-# def create_task(task: Task):  
-#     tasks.append(task)  
-#     return {"message": "Tâche ajoutée avec succès", "task": task}  
-
