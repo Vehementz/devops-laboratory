@@ -28,6 +28,15 @@ Example :
 curl -X DELETE http://127.0.0.1:8000/tasks/1
 ```
 
+- Update a task
+
+```
+curl -X PUT http://127.0.0.1:8000/tasks/2 \
+    -H "Content-Type: application/json" \
+    -d '{"description": "Updated description", "completed": true}'
+```
+
+
 <!-- When you install with pip install "fastapi[standard]" it comes with some default optional standard dependencies.
 If you don't want to have those optional dependencies, you can instead install pip install fastapi. -->
 

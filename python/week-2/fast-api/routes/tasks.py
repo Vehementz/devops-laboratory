@@ -13,6 +13,9 @@ class TaskCreate(TaskBase):
     # For creation, title is required
     title: str
 
+class TaskUpdate(TaskBase):
+    # For updates, all fields are optional, as we might do partial updates
+    pass
 
 class Task(TaskBase):
     id: int
