@@ -5,15 +5,19 @@ from typing import List, Optional
 router = APIRouter()
 
 class TaskBase(BaseModel):
-    title: str
+    title: Optional[str] = None
     description: Optional[str] = None
-    completed: bool = False
+    completed: Optional[bool] = None
 
 class TaskCreate(TaskBase):
-    pass
+    # For creation, title is required
+    title: str
+
 
 class Task(TaskBase):
     id: int
+    title: str  # Ensure title is always present on existing tasks
+    completed: bool = False
 
 # In-memory "database"
 fake_db: List[Task] = [
