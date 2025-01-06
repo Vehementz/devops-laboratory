@@ -1,6 +1,4 @@
-  GNU nano 6.2                                                                      restic-script.sh                                                                                
-#!/bin/bash
-
+#! /bin/bash
 # Prompt for paths
 read -p "Give the repository path that you want to initialize: " init_deposit_path
 read -p "Give the data repository path that contains data you want to save: " data_path
