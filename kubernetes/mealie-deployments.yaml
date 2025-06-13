@@ -1,4 +1,6 @@
 # To deploy an application that allow to create recipes and checklist for foods and grocery shoping. 
+# You can access it locally with the command `k port-forward pods/mealie-podname-truc 9000`
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
