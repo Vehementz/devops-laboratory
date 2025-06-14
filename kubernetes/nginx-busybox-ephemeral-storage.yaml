@@ -1,0 +1,26 @@
+yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-storage               # <-- this is required
+  labels:
+    name: nginx-storage
+spec:
+  containers:
+    - image: nginx
+      name: nginx
+      volumeMounts: 
+        - mountPath: /scratch
+          name: scratch-volume
+    - image: busybox
+      name: busybox
+      command: ["/bin/sh", "-c"] # Keep an open command to keep a process and keep running
+      args: ["sleep 1000"]
+      volumeMounts:
+        - mountPath: /scratch
+          name: scratch-volume
+  volumes:
+  - name: scratch-volume
+    emptyDir:
+      sizeLimit: 500Mi
+
